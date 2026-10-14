@@ -1,8 +1,6 @@
-# test_acceptance_edge_cases.py
-
+"""Acceptance tests for edge cases in image uploads."""
 from io import BytesIO
-import pytest
-from threading import Thread
+
 
 # Helper function for concurrent image uploads
 def upload_image(client, img_data):
@@ -16,6 +14,7 @@ def upload_image(client, img_data):
         data={"file": (img_data, img_data.name)},
         content_type="multipart/form-data"
     )
+
 
 # 1. Edge Case: Uploading a Large Image File
 def test_edge_case_large_image_upload(client):
@@ -36,6 +35,7 @@ def test_edge_case_large_image_upload(client):
     # Assert that the system can process large image files
     assert b"Prediction" in response.data  # Adjust based on actual prediction content
 
+
 # 2. Edge Case: Uploading an Image with Missing or Incorrect Metadata
 def test_edge_case_invalid_metadata(client):
     """
@@ -55,6 +55,7 @@ def test_edge_case_invalid_metadata(client):
     # Assert that the system processes the image even without metadata
     assert b"Prediction" in response.data  # Adjust based on actual behavior
 
+
 # 3. Edge Case: Uploading an Image with Non-Standard File Extensions
 def test_edge_case_non_standard_image_extensions(client):
     """
@@ -73,6 +74,7 @@ def test_edge_case_non_standard_image_extensions(client):
 
     # Ensure the system processes the file despite the non-standard extension
     assert b"Prediction" in response.data  # Adjust based on actual prediction content
+
 
 # 4. Edge Case: Uploading a Sequence of Images for Multi-Step Processing
 def test_edge_case_sequential_image_uploads(client):
@@ -105,6 +107,7 @@ def test_edge_case_sequential_image_uploads(client):
     assert b"Prediction" in response1.data
     assert b"Prediction" in response2.data
 
+
 # 5. Edge Case: Uploading with Unexpected Headers
 def test_edge_case_unexpected_headers(client):
     """
@@ -125,6 +128,7 @@ def test_edge_case_unexpected_headers(client):
 
     # Assert that the upload is still processed correctly despite the unexpected header
     assert b"Prediction" in response.data
+
 
 # 6. Edge Case: Uploading an Image with HTTP/2
 def test_edge_case_upload_over_http2(client):
